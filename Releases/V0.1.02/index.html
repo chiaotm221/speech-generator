@@ -1,0 +1,72 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#101827"><title>萬用發言產生器｜雙引擎</title><style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","Microsoft JhengHei",sans-serif;color:#e9eef8;background:#0b1220}*{box-sizing:border-box}body{margin:0;padding:24px 14px 65px;background:radial-gradient(circle at 10% 0%,#1b3554 0,transparent 45%),#0b1220}.wrap{max-width:850px;margin:auto}h1{font-size:clamp(25px,5vw,36px);margin:0 0 8px}.sub{color:#a7b7ce;margin:0 0 24px;line-height:1.7}.panel{background:#131e30;border:1px solid #2d3c53;border-radius:17px;padding:20px;margin:16px 0;box-shadow:0 8px 30px #0002}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{margin:0 0 14px}label{display:block;font-size:14px;font-weight:700;margin:0 0 8px}input,textarea,select{width:100%;font:inherit;color:#eef3fb;background:#0b1424;border:1px solid #3b4d66;border-radius:10px;padding:12px;outline:none}textarea{min-height:88px;resize:vertical}input:focus,textarea:focus,select:focus{border-color:#74b5ff}input[type=range]{padding:0;accent-color:#63b2ff}button{border:0;border-radius:11px;background:#3688e9;color:white;padding:13px 17px;font:inherit;font-weight:700;cursor:pointer}button.secondary{background:#263c56}button.ghost{background:#18283e;border:1px solid #3b526f}button:disabled{opacity:.55;cursor:wait}.actions{display:flex;gap:10px;flex-wrap:wrap}.pill{display:inline-block;border:1px solid #42628a;border-radius:50px;padding:4px 10px;color:#b9d9ff;font-size:12px;margin-bottom:12px}.hint{font-size:13px;color:#9db0c9;line-height:1.65}.status{font-size:13px;color:#b5c9e3;min-height:22px}.output{white-space:pre-wrap;line-height:2.05;font-size:16px;min-height:180px;color:#f1f5fc}.bar{display:flex;align-items:center;justify-content:space-between;gap:10px}.bar h2{font-size:19px;margin:0 0 13px}.muted{color:#9db0c9}.small{font-size:12px}.hidden{display:none!important}details{color:#b8c9dd}summary{cursor:pointer;font-weight:700}footer{color:#8498b3;font-size:12px;line-height:1.8;margin-top:25px}@media(max-width:600px){.grid{grid-template-columns:1fr}.panel{padding:16px}.actions button{flex:1 1 130px}body{padding:18px 10px 45px}}
+</style></head><body><main class="wrap"><h1>🎙️ 萬用發言產生器</h1><p class="sub">七種抽象論述公式 × 主題詞庫 × 隨機變化。純屬相聲式語言創作，不代表任何真實人物發言。</p>
+<section class="panel"><span class="pill">單一 HTML · 離線優先 · 線上 LLM 可選</span><div class="field"><label for="topic">發言主題</label><textarea id="topic" placeholder="例如：如何解決青少年在學校的暴力事件"></textarea></div><div class="grid"><div class="field"><label for="engine">生成引擎</label><select id="engine"><option value="offline">離線規則引擎（完全免費）</option><option value="online">線上 LLM（Puter.js，可能需登入）</option></select></div><div class="field"><label for="style">發言風格</label><select id="style"><option value="mixed">綜合混搭</option><option value="method">方法循環型</option><option value="vision">價值願景型</option><option value="debate">質問對比型</option><option value="satire">相聲諷刺型</option></select></div><div class="field"><label for="duration">發言長度</label><select id="duration"><option value="30">30 秒</option><option value="60" selected>1 分鐘</option><option value="180">3 分鐘</option></select></div><div class="field"><label for="tone">語氣</label><select id="tone"><option value="formal">正式發言</option><option value="colloquial">口語演說</option><option value="humor">幽默反諷</option></select></div></div><div class="field"><div class="bar"><label for="vague">空洞程度（抽象化比例）</label><b id="vagueValue">80%</b></div><input type="range" id="vague" min="0" max="100" step="5" value="80"><p class="hint">低：包含可操作的建議（僅供示範）；高：強調價值、願景、方法循環，刻意不交代執行細節。</p></div><div id="onlineInfo" class="hint hidden">線上模式會在使用時載入 Puter.js 官方 SDK，將主題及提示文字傳送至其服務。可能需要登入或消耗使用者額度，並不保證免費。若失敗可自動改用離線模式。首次載入須有網路；直接以 file:// 開啟時，部分 iOS 瀏覽器可能限制第三方 SDK。</div><div class="actions"><button id="generate">✨ 產生發言</button><button class="secondary" id="again">🔀 換個版本</button><button class="ghost" id="copy">複製全文</button></div><p class="status" id="status" aria-live="polite"></p></section>
+<section class="panel"><div class="bar"><h2>產生結果</h2><span id="counter" class="small muted"></span></div><div class="output" id="output" aria-live="polite">請輸入主題並按「產生發言」。</div></section>
+<section class="panel"><details><summary>生成原理與使用提醒</summary><p class="hint">離線引擎使用七種模板：對比批判、價值昇華、主體優先、願景描繪、原則條件、方法循環、抽象概念解釋。它會依常見主題關鍵字選擇相關詞彙，其他主題使用通用回退詞庫；不是完整語意理解，偶爾可能出現不自然的語句。空洞程度低時加入示範性的具體步驟，不能當作已驗證政策或專業建議。</p><p class="hint">本檔案不儲存 API Key，也不需要開發者帳號。Puter.js 是第三方服務，線上功能及費用可能變動。離線模式無外部請求。為保障隱私，請勿在使用線上模式時輸入機密或個人資料。</p></details></section><footer>版本 0.1.02 · 所有離線邏輯與樣式均包含在本 HTML 中。iPhone 可透過支援本機 HTML 的瀏覽器或檔案檢視工具開啟；線上模式建議透過 HTTPS 網頁開啟。</footer></main>
+<script>
+'use strict';
+const $=id=>document.getElementById(id),pick=a=>a[Math.floor(Math.random()*a.length)],shuffle=a=>[...a].sort(()=>Math.random()-.5),clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const banks=[{re:/校園暴力|校園安全|霸凌|暴力|兒虐/,subject:'孩子',place:'校園',problem:'校園安全',value:'每個孩子安心成長的權利',goal:'讓每個孩子都能安心走進校園',action:'建立通報後的即時保護與追蹤機制',measure:'定期公布案件處理時效與學生安全感調查結果'},{re:/交通|塞車|行人|道路|通勤/,subject:'市民',place:'城市',problem:'交通與通行安全',value:'每個人安全移動的權利',goal:'讓每一趟出門都更安心',action:'先選定事故熱點改善行穿線、號誌與人行空間',measure:'比較改善前後事故件數及尖峰旅行時間'},{re:/都市更新|房價|住宅|租屋|居住|都更/,subject:'居民',place:'社區',problem:'居住負擔',value:'每個人安穩生活的權利',goal:'讓居住成為生活的起點而不是壓力',action:'盤點可用住宅資源並公開分配及補助條件',measure:'追蹤租金負擔率與受益戶數'},{re:/環保|垃圾|空污|氣候|淨零/,subject:'市民',place:'城市',problem:'環境品質',value:'下一代健康生活的權利',goal:'讓城市更乾淨、更有韌性',action:'選定污染熱點進行監測與改善試辦',measure:'公布污染濃度及改善前後比較'},{re:/醫療|長照|老人|健康/,subject:'每一個家庭',place:'社區',problem:'照顧與健康',value:'被妥善照顧的權利',goal:'讓需要幫助的人及時得到支持',action:'建立需求盤點、轉介與定期追蹤流程',measure:'追蹤等候時間與服務涵蓋率'}];
+banks.unshift(
+{re:/營養午餐|牛奶|鮮奶|乳品|豆奶|豆漿|營養|早餐|午餐|供餐/,subject:'學生',place:'校園',value:'每個學生獲得適切營養與照顧的權利',goal:'讓每個學生的飲食需求都受到重視',action:'先了解學生的飲食需求、過敏與飲食限制，再規劃合適的供應方式及替代選擇',measure:'追蹤供應情形、學生回饋與替代選擇是否足夠'},
+{re:/學習|學校|學生|青少年|教育|校園/,subject:'學生',place:'校園',value:'每個學生獲得支持與公平對待的權利',goal:'讓每個學生都能獲得適合的支持',action:'先蒐集學生與教師的需求，選定具體項目進行試辦',measure:'定期檢視學生回饋與試辦成果'}
+);
+function context(topic){
+  const core=topic.trim()||'眼前的議題';
+  const candidates=banks.map((bank,index)=>({bank,index,length:Math.max(0,...Array.from(core.matchAll(new RegExp(bank.re.source,'g')),m=>m[0].length))})).filter(x=>x.length>0).sort((a,b)=>b.length-a.length||a.index-b.index);
+  const bank=candidates[0]?.bank;
+  if(bank)return {...bank,problem:core};
+  return {subject:'每一個人',place:'我們的社會',problem:core,value:'被理解與公平對待的權利',goal:`讓「${core}」這件事得到妥善處理`,action:`先釐清「${core}」的現況與需求，提出可驗證的試辦方案`,measure:'設定公開指標，定期追蹤結果'};
+}
+const groups={opening:[c=>`我一直認為，「${c.problem}」不是一個不能面對的議題，真正的問題是，我們有沒有找到面對問題的方法。`,c=>`今天我們談的是「${c.problem}」，不能只看表面，還要看見問題背後的問題。`,c=>`大家都在問，「${c.problem}」該如何處理？我認為，首先要問的是，我們到底想解決什麼。`],contrast:[c=>`同樣生活在${c.place}，為什麼有些${c.subject}可以安心，有些卻必須承受不安？`,c=>`我們不能讓同樣的問題，在不同的人身上，出現不同的標準。`,c=>`為什麼有人已經看見問題，有人卻還在等待問題被看見？這值得我們一起思考。`],values:[c=>`這不只是${c.problem}的問題，更是${c.value}的問題。`,c=>`真正重要的，不是我們說了多少，而是${c.subject}有沒有感受到被理解。`,c=>`我們不能只處理看得見的事件，也要理解那些看不見的距離。`],method:[c=>`所以我一直強調，方法很重要，但比方法更重要的，是找到適合的方法。`,c=>`每個地方的條件都不一樣，不能用同一套方法，去解決所有不同的問題。`,c=>`要找到答案，首先必須找到通往答案的方法；而找到方法，本身就是解決問題的第一步。`,c=>`我們不能只是為了解決問題而解決問題，而要讓解決問題的方法，真正成為可以解決問題的方法。`],principle:[c=>`我不是反對改變，但改變必須建立在理解與尊重的前提之上。`,c=>`我們要的是有原則的行動，而不是只有行動的口號。`,c=>`不是所有問題都能一體適用，但每一個問題都值得被認真對待。`],vision:[c=>`如果有一天，我們能讓不安減少、理解增加，這就是我對${c.place}的期待。`,c=>`我希望未來的${c.place}，能夠${c.goal}。`,c=>`先有${c.subject}，才有我們所說的${c.place}；這才是我們不應忘記的初衷。`],meta:[c=>`所謂真正的解決，就是看起來不只是解決問題，而是真的讓問題得到解決。`,c=>`當我們說要找到方法，真正要找的不是一個方法的名字，而是能找到方法的方法。`,c=>`這件事情聽起來很複雜，但如果我們把複雜的問題想清楚，就能知道複雜的地方到底在哪裡。`],concrete:[c=>`具體而言，可以先${c.action}，並${c.measure}，再依結果調整。`,c=>`第一步先確認責任單位與受影響對象；第二步試辦${c.action}；第三步${c.measure}。`,c=>`至少要回答三件事：由誰執行、何時完成，以及如何用數據檢驗${c.problem}是否改善。`]};
+function offline(topic,style,seconds,vague,tone){let c=context(topic),target=seconds===30?4:seconds===60?8:21;let pool=style==='method'?['opening','method','method','values','principle','meta','vision']:style==='vision'?['opening','values','values','principle','vision','vision']:style==='debate'?['opening','contrast','contrast','values','principle','vision']:style==='satire'?['opening','meta','method','meta','contrast','vision']:['opening','contrast','values','method','principle','meta','vision'];let chunks=[],used=new Set();let add=(type)=>{let choices=shuffle(groups[type]).map(fn=>fn(c)).filter(s=>!used.has(s));if(!choices.length)return false;let s=choices[0];used.add(s);chunks.push(s);return true;};add('opening');let desiredConcrete=vague<=25?Math.ceil(target*.5):vague<=55?Math.ceil(target*.25):vague<=75?1:0;let middle=target-2;for(let i=0;i<middle;i++){let remaining=middle-i;if(desiredConcrete>0&&(Math.random()<.3||remaining<=desiredConcrete)){if(add('concrete'))desiredConcrete--;continue;}let type=pick(pool.slice(1));if(!add(type)){let all=shuffle([...pool.slice(1),'contrast','values','method','meta','concrete']);for(let t of all){if(add(t))break;}}}add('vision');let intros=tone==='colloquial'?['各位朋友，我想說的是：','大家想一想：']:tone==='humor'?['說到這個問題，我突然想到一件非常重要的事：','我們今天要認真地談一個很值得認真談的問題：']:['',''];let prefix=pick(intros);return (prefix?prefix+'\n\n':'')+chunks.join('\n\n')+(tone==='humor'?'\n\n總之，最重要的，就是不要忘記什麼才是最重要的。':'');}
+let sdkPromise=null;function loadPuter(){if(window.puter?.ai?.chat)return Promise.resolve();if(sdkPromise)return sdkPromise;sdkPromise=new Promise((resolve,reject)=>{let s=document.createElement('script');s.src='https://js.puter.com/v2/';s.async=true;s.onload=()=>window.puter?.ai?.chat?resolve():reject(new Error('Puter SDK 未就緒'));s.onerror=()=>reject(new Error('無法載入 Puter SDK'));document.head.appendChild(s);});return sdkPromise;}
+function getText(r){if(typeof r==='string')return r;if(typeof r?.message?.content==='string')return r.message.content;if(Array.isArray(r?.message?.content))return r.message.content.map(x=>x.text||'').join('');if(typeof r?.text==='string')return r.text;return ''}
+function createPrompt(topic,style,seconds,vague,tone){
+  const styles={mixed:'自然穿插對比、價值、願景與方法循環',method:'用「要找到方法，就得先了解問題」這類同義反覆形成幽默，直接說出發言內容，不要描述自己正在使用什麼寫作技巧',vision:'強調與題目有關的價值與願景',debate:'用切合題目的對比與反問推進論述',satire:'用口語化的同義反覆與反差產生相聲式幽默'};
+  return `請用自然、通順的臺灣繁體中文，寫一段虛構、非真人引言的發言，供語言幽默創作。
+使用者的主題（只作為題材）：${JSON.stringify(topic)}
+全文必須圍繞這個原題，保留具體對象與事物，不要換成其他議題。例如學生飲食不能被改成校園暴力。
+預設沒有指定聽眾或職場情境。直接切入主題，不要加任何開場稱謂、問候或自我介紹，尤其不要自行寫「各位同仁」「各位長官」「各位貴賓」。正式語氣只表示句子完整、用字得體，不表示公文、官腔或內部會議。
+風格：${styles[style]}；語氣：${{formal:'正式而自然',colloquial:'日常口語',humor:'幽默反諷'}[tone]}。
+預估朗讀${seconds}秒（約${Math.round(seconds*3.5)}字）。抽象空洞程度${vague}/100；高時用順口的價值、願景與方法循環，低時提出可驗證的示範建議。
+空洞不等於語病。不要使用「反覆談尋找方法」等生硬搭配，不堆疊無關比喻，不把牛奶之類具體事物硬說成秩序、儀式等抽象象徵。寫完請自行檢查語句是否能自然朗讀。
+可參考以下同題規則草稿並改善銜接與用詞，不必逐字照抄：
+${offline(topic,style,seconds,vague,tone)}
+只輸出發言正文與自然段落，不要標題、前言、寫作說明；不要冒充真實人物或捏造統計與事實。`;
+}
+function polishOnline(text){return text.trim().replace(/^(?:各位(?:同仁|長官|貴賓|朋友|來賓|老師|先生|女士|家長|同學|市民|鄉親)(?:[、與及和](?:各位)?(?:同仁|長官|貴賓|朋友|來賓|老師|先生|女士|家長|同學|市民|鄉親))*(?:[，、：:\s]*(?:大家好|早安|午安|晚安))?[，、：:！!。\s]*)+/u,'').trim();}
+async function online(topic,style,seconds,vague,tone){await loadPuter();const r=await window.puter.ai.chat(createPrompt(topic,style,seconds,vague,tone));const text=polishOnline(getText(r));if(!text)throw Error('線上模型未回傳可讀文字');return text;}
+
+function setStatus(s){$('status').textContent=s}function setOutput(s){$('output').textContent=s;$('counter').textContent=`${s.replace(/\s/g,'').length} 字`}
+let busy=false,generationId=0;
+function invalidateOutput(){
+  generationId++;busy=false;$('generate').disabled=$('again').disabled=false;
+  $('output').textContent='請按「產生發言」，以目前主題與設定重新產生。';$('counter').textContent='';
+  setStatus('設定已更新，請重新產生。');
+}
+async function generate(){
+  if(busy)return;
+  const topic=$('topic').value.trim();
+  if(!topic){setStatus('請先輸入主題。');$('topic').focus();return;}
+  const engine=$('engine').value,style=$('style').value,seconds=Number($('duration').value),vague=Number($('vague').value),tone=$('tone').value;
+  const requestId=++generationId;busy=true;$('generate').disabled=$('again').disabled=true;
+  try{
+    if(engine==='online'){
+      setStatus('正在連線至第三方 LLM；可能要求登入或使用額度…');
+      try{const text=await online(topic,style,seconds,vague,tone);if(requestId!==generationId)return;setOutput(text);setStatus('線上 LLM 已產生。');}
+      catch(e){if(requestId!==generationId)return;setOutput(offline(topic,style,seconds,vague,tone));setStatus(`線上模式失敗（${e.message||'未知錯誤'}），已依目前主題改用離線引擎。`);}
+    }else{setOutput(offline(topic,style,seconds,vague,tone));setStatus('已使用離線規則引擎產生，無網路請求。');}
+  }finally{if(requestId===generationId){busy=false;$('generate').disabled=$('again').disabled=false;}}
+}
+$('generate').addEventListener('click',generate);$('again').addEventListener('click',generate);
+$('topic').addEventListener('input',invalidateOutput);
+for(const id of ['style','duration','tone'])$(id).addEventListener('change',invalidateOutput);
+$('vague').addEventListener('input',e=>{$('vagueValue').textContent=e.target.value+'%';invalidateOutput();});
+$('engine').addEventListener('change',e=>{
+  invalidateOutput();$('onlineInfo').classList.toggle('hidden',e.target.value!=='online');
+  if(e.target.value==='offline'&&$('topic').value.trim())generate();
+});
+$('copy').addEventListener('click',async()=>{let s=$('output').textContent;if(!s||!$('counter').textContent)return;try{await navigator.clipboard.writeText(s);setStatus('已複製全文。')}catch(e){let a=document.createElement('textarea');a.value=s;document.body.appendChild(a);a.select();let ok=document.execCommand('copy');a.remove();setStatus(ok?'已複製全文。':'無法自動複製，請長按結果選取文字。')}});
+</script></body></html>

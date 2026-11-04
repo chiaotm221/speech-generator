@@ -14,6 +14,8 @@
 
 GitHub Pages 使用 `main` 分支的 `/(root)`。根目錄 `index.html` 是網站入口，`.nojekyll` 讓 GitHub 直接發布靜態檔案，無需安裝套件或編譯。
 
-首次發布內容來自 `Releases/V0.1.01/index.html`。日後更新版本時，將新版本複製至根目錄 `index.html`，提交並推送至 `main`，GitHub Pages 就會自動重新部署。部署結果可在儲存庫 Actions 查看。
+目前發布內容為 `Releases/V0.1.02/index.html`，保留 `V0.1.01` 原始版本。日後更新版本時，將新版本複製至根目錄 `index.html`，提交並推送至 `main`，GitHub Pages 就會自動重新部署。部署結果可在儲存庫 Actions 查看。
+
+執行 `node tests/generation.cjs` 可檢查主題比對、LLM 稱謂清理、引擎切換、過期回應與失敗備援。測試使用模擬 DOM 與 LLM 回應，不呼叫付費服務。
 
 需求與後續規劃見 `plan.md`。iPad/iPhone 請使用 Safari 開啟上述 HTTPS 網址。

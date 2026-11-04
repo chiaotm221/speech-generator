@@ -1,0 +1,10 @@
+.vscode/
+.idea/
+.codex/
+.agents/
+.aws/
+.env
+.env.*
+node_modules/
+*.code-workspace
+*.log

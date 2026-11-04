@@ -4,7 +4,7 @@
 > 文件版本：1.0（2026-11-04）  
 > 語言：繁體中文（zh-TW）  
 > 專案位置：<https://github.com/chiaotm221/speech-generator>  
-> 預定 GitHub Pages 網址：<https://chiaotm221.github.io/speech-generator/>（**尚未確認已上線**）
+> GitHub Pages 網址：<https://chiaotm221.github.io/speech-generator/>（**2026-11-04 首次部署完成**）
 
 ## 1. 專案緣起與目的
 
@@ -250,10 +250,10 @@ UIController
 
 ### 狀態說明
 
-- **已知**：使用者表示已建立 GitHub 帳號及儲存庫，並提供上述儲存庫 URL。
-- **已準備**：先前對話產出單一 HTML 與 GitHub Pages 打包檔。
-- **未確認**：是否已將 `index.html` 推送至遠端、是否啟用 Pages、網站是否上線、iPad Safari 是否正常執行。
-- **權限限制**：此前對話未取得可直接寫入 GitHub 儲存庫的可用工具權限；不可宣稱已替使用者部署完成。
+- **已部署（2026-11-04）**：以 `Releases/V0.1.01/index.html` 建立根目錄 `index.html`，加入 `.nojekyll`，推送至 `main`，啟用 GitHub Pages `main` / `/(root)`。
+- **已驗證**：首次部署 [Actions 執行紀錄](https://github.com/chiaotm221/speech-generator/actions/runs/41765980894) 成功；HTTPS 首頁回傳 HTTP 200，內容與本機首頁一致（正規化換行後比對）。
+- **程式檢查**：Node.js 通過 JavaScript 語法、初始離線生成、不同題目與三種長度、空白輸入檢查；此為模擬 DOM 檢查，不等同真實瀏覽器端到端測試。
+- **仍待實測**：桌面瀏覽器實際互動、iPad Safari 按鈕與複製、Puter.js 線上模型登入及生成。首次部署未修改原版生成邏輯。
 
 ## 11. 現有產物
 
@@ -273,8 +273,8 @@ UIController
 
 ### Phase 0 — 現況盤點（優先）
 
-- [ ] 讀取現有 `index.html`，確認實際功能與 UI，不以討論中的需求取代程式現況。
-- [ ] 確認 GitHub 儲存庫遠端內容、Pages 設定及發布狀態。
+- [x] 讀取現有 `index.html`，確認實際功能與 UI，不以討論中的需求取代程式現況。
+- [x] 確認 GitHub 儲存庫遠端內容、Pages 設定及發布狀態。
 - [ ] 在桌面 Chrome / Edge 與 iPad Safari 實測 JavaScript 是否啟動。
 - [ ] 建立可見錯誤訊息與除錯模式，避免「按鈕沒反應」。
 
